@@ -4,6 +4,7 @@ import {
   Text,
   View,
   Platform,
+  Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import ViewPropTypes from './lib';
@@ -32,6 +33,15 @@ const StatusBarShape = {
   hideAnimation: PropTypes.oneOf(['fade', 'slide', 'none']),
   showAnimation: PropTypes.oneOf(['fade', 'slide', 'none']),
 };
+
+function isIphoneX() {
+  let dimen = Dimensions.get('window');
+  return (
+    Platform.OS === 'ios' &&
+    (dimen.height === 812 || dimen.width === 812)
+  );
+}
+
 
 function getButtonElement(data, style) {
   return (
@@ -148,8 +158,12 @@ export default class NavigationBar extends Component {
         <View style={[styles.statusBar, customStatusBarTintColor]} /> : null;
     }
 
+    const iPhoneXPadding = {
+      paddingTop: isIphoneX ? 24 : 0,
+    }
+
     return (
-      <View style={[styles.navBarContainer, containerStyle, customTintColor]}>
+      <View style={[styles.navBarContainer, containerStyle, customTintColor, iPhoneXPadding]}>
         {statusBar}
         <View style={[styles.navBar, style]}>
           {getTitleElement(title)}
